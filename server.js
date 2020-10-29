@@ -7,7 +7,6 @@ const port = process.env.PORT || 5000;
 
 require("dotenv").config();
 
-// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use("/api/v1/", router);
