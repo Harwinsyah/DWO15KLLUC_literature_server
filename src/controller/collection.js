@@ -1,4 +1,5 @@
 const { User, Literature, Collection } = require("../../models");
+const { Op } = require("sequelize");
 
 exports.index = async (req, res) => {
   try {
@@ -22,6 +23,7 @@ exports.index = async (req, res) => {
         },
       ],
       attributes: {
+        include: ["id"],
         exclude: ["createdAt", "updatedAt"],
       },
     });
@@ -47,6 +49,37 @@ exports.create = async (req, res) => {
     const collection = await Collection.create(req.body);
     res.send({
       message: "Success add Literature to Your Collection",
+      data: {
+        collection,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      error: {
+        message: "Server Error",
+      },
+    });
+  }
+};
+
+exports.check = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { literatureId } = req.params;
+    const collection = await Collection.findOne({
+      where: {
+        [Op.and]: [{ userId }, { literatureId }],
+      },
+
+      attributes: {
+        include: ["id"],
+        exclude: ["createdAt", "updatedAt"],
+      },
+    });
+
+    res.send({
+      message: "Response Success",
       data: {
         collection,
       },

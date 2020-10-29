@@ -6,7 +6,16 @@ const jwtKey = "l1t3124tur3TA5k";
 
 exports.register = async (req, res) => {
   try {
-    const { email, password, fullName, gender, phone, address } = req.body;
+    const {
+      email,
+      password,
+      fullName,
+      gender,
+      phone,
+      address,
+      picture,
+    } = req.body;
+    console.log(req.body);
     const checkEmail = await User.findOne({
       where: {
         email,
@@ -30,6 +39,7 @@ exports.register = async (req, res) => {
       gender,
       phone,
       address,
+      picture,
     });
 
     const token = jwt.sign(
@@ -137,13 +147,18 @@ exports.detail = async (req, res) => {
 exports.edit = async (req, res) => {
   try {
     const { id } = req.params;
-    await User.update(req.body, {
-      where: {
-        id,
+    await User.update(
+      {
+        picture: req.file.filename,
       },
-    });
+      {
+        where: {
+          id,
+        },
+      }
+    );
 
-    const updatedUser = await User.findOne({
+    const data = await User.findOne({
       where: {
         id,
       },
@@ -152,11 +167,9 @@ exports.edit = async (req, res) => {
       },
     });
 
-    res.send({
+    res.status(200).send({
       message: "Response Success! Data has been Updated",
-      data: {
-        updatedUser,
-      },
+      data,
     });
   } catch (err) {
     console.log(err);

@@ -1,7 +1,7 @@
 const { Literature, User } = require("../../models");
 const { Op } = require("sequelize");
 
-exports.admin = async (req, res) => {
+exports.getAll = async (req, res) => {
   try {
     const literatures = await Literature.findAll({
       order: [["id", "DESC"]],
@@ -70,10 +70,15 @@ exports.index = async (req, res) => {
 exports.search = async (req, res) => {
   try {
     const { title } = req.params;
+    const { publicationDate } = req.params;
     const status = "Approved";
     const literatures = await Literature.findAll({
       where: {
-        [Op.and]: [{ status }, { title: { [Op.substring]: title } }],
+        [Op.and]: [
+          { status },
+          { title: { [Op.substring]: title } },
+          { publicationDate: { [Op.substring]: publicationDate } },
+        ],
       },
       include: [
         {
@@ -194,6 +199,27 @@ exports.edit = async (req, res) => {
       data: {
         literature,
       },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      error: {
+        message: "Server Error",
+      },
+    });
+  }
+};
+
+exports.delete = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Literature.destroy({
+      where: {
+        id,
+      },
+    });
+    res.send({
+      message: `Success Delete Literature With id ${id} `,
     });
   } catch (err) {
     console.log(err);
