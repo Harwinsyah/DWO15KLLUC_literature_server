@@ -10,4 +10,9 @@ require("dotenv").config();
 app.use(bodyParser.json());
 app.use(cors());
 app.use("/api/v1/", router);
+
+app.get("/", function (req, res) {
+  res.send("hello world");
+});
+
 app.listen(port, () => console.log(`Listen on port ${port}`));
