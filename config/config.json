@@ -15,7 +15,7 @@
   },
   "production": {
     "use_env_variable" : "DATABASE_URL",
-    "username": "d9jsg65c5dgv9l",
+    "username": "slrsrbwzpamrbb",
     "password": "5d17e64397b887fec3e177ae677a4a73a37258eba9ef42854a8b7104899dce4e",
     "port": 5432,
     "database": "d9jsg65c5dgv9l",
